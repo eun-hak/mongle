@@ -109,7 +109,22 @@ const SITE = process.env.SITE_ID ?? "mongle";
 const TABLE = process.env.DDB_TABLE ?? "content";
 const PK = `SITE#${SITE}`;
 
-const doc = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+// Vercel은 AWS_* 이름을 예약어로 막으므로 APP_AWS_* 이름을 우선 사용
+const region =
+  process.env.APP_AWS_REGION ?? process.env.AWS_REGION ?? "ap-northeast-2";
+const accessKeyId =
+  process.env.APP_AWS_ACCESS_KEY_ID ?? process.env.AWS_ACCESS_KEY_ID;
+const secretAccessKey =
+  process.env.APP_AWS_SECRET_ACCESS_KEY ?? process.env.AWS_SECRET_ACCESS_KEY;
+
+const doc = DynamoDBDocumentClient.from(
+  new DynamoDBClient({
+    region,
+    ...(accessKeyId && secretAccessKey
+      ? { credentials: { accessKeyId, secretAccessKey } }
+      : {}),
+  })
+);
 
 /** DynamoDB 아이템에서 내부 키를 제거하고 Post로 변환 */
 function toPost(item: Record<string, unknown>): Post {
