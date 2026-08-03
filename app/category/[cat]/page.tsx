@@ -13,7 +13,7 @@ interface CategoryPageProps {
 }
 
 export function generateStaticParams() {
-  return CATEGORIES.map((c) => ({ cat: c.name }));
+  return CATEGORIES.map((c) => ({ cat: encodeURIComponent(c.name) }));
 }
 
 export async function generateMetadata({

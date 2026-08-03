@@ -25,7 +25,8 @@ async function resolvePost(raw: string): Promise<Post | undefined> {
 }
 
 export async function generateStaticParams() {
-  return (await getAllPosts()).map((post) => ({ slug: post.slug }));
+  // 한글 파일명은 Vercel 정적 수집에서 깨지므로 인코딩된 경로로 프리렌더
+  return (await getAllPosts()).map((post) => ({ slug: encodeURIComponent(post.slug) }));
 }
 
 export async function generateMetadata({

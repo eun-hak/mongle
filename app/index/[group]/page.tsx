@@ -12,7 +12,7 @@ interface IndexPageProps {
 }
 
 export function generateStaticParams() {
-  return CHOSUNG.map((group) => ({ group }));
+  return CHOSUNG.map((group) => ({ group: encodeURIComponent(group) }));
 }
 
 export async function generateMetadata({
