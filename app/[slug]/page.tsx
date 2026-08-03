@@ -25,8 +25,9 @@ async function resolvePost(raw: string): Promise<Post | undefined> {
 }
 
 export async function generateStaticParams() {
-  // 한글 파일명은 Vercel 정적 수집에서 깨지므로 인코딩된 경로로 프리렌더
-  return (await getAllPosts()).map((post) => ({ slug: encodeURIComponent(post.slug) }));
+  // 한글 경로는 Vercel 빌드 산출물 수집에서 깨지므로 빌드 시 프리렌더하지 않는다.
+  // 페이지는 첫 방문 시 ISR로 생성되어 캐시된다 (dynamicParams=true).
+  return [];
 }
 
 export async function generateMetadata({

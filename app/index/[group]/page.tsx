@@ -12,7 +12,7 @@ interface IndexPageProps {
 }
 
 export function generateStaticParams() {
-  return CHOSUNG.map((group) => ({ group: encodeURIComponent(group) }));
+  return []; // 한글 경로 — 방문 시 ISR 생성
 }
 
 export async function generateMetadata({

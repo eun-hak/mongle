@@ -13,7 +13,7 @@ interface CategoryPageProps {
 }
 
 export function generateStaticParams() {
-  return CATEGORIES.map((c) => ({ cat: encodeURIComponent(c.name) }));
+  return []; // 한글 경로 — 방문 시 ISR 생성
 }
 
 export async function generateMetadata({
