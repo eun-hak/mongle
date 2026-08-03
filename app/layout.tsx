@@ -49,7 +49,15 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   alternates: { canonical: "./" },
+  verification: {
+    google: "nGLC6wqeingyxdWpDtTR9DKlBw7TNDT9A8_l8PrHWt0",
+    other: {
+      "naver-site-verification": "f8d4d51c35f760b8179bbe798cc14df41034b939",
+    },
+  },
 };
+
+const GA_ID = "G-JFXKNHXMKH";
 
 export const viewport = {
   themeColor: "#171233",
@@ -71,6 +79,19 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${serif.variable} ${sans.variable}`}>
       <body>
+        {/* Google tag (gtag.js) */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
