@@ -1,0 +1,264 @@
+/* ============================================================
+   홈 페이지 전용 스타일 (app/page.tsx)
+   ============================================================ */
+
+/* ---------- 히어로 ---------- */
+.home-hero {
+  padding: 72px 0 84px;
+  text-align: center;
+}
+
+.home-hero-title {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.home-hero-sub {
+  margin-top: 12px;
+  margin-bottom: 32px;
+  font-size: 17px;
+  color: var(--lav);
+}
+
+.home-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 10px;
+  margin-top: 26px;
+}
+
+.home-chip-label {
+  align-self: center;
+  font-size: 13px;
+  color: var(--lav-soft);
+}
+
+.home-chip {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 200, 107, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--moon-soft);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.home-chip:hover {
+  background: rgba(233, 200, 107, 0.16);
+  border-color: var(--moon);
+  color: var(--moon);
+}
+
+/* ---------- 공통 섹션 ---------- */
+.home-section {
+  margin-top: 64px;
+}
+
+.home-section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.home-section-sub {
+  margin-top: 6px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* ---------- 카테고리 그리드 ---------- */
+.home-cat-grid {
+  display: grid;
+  /* minmax(0,1fr): 내용물이 길어도 트랙이 뷰포트 밖으로 커지지 않게 */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.home-cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 20px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.home-cat-card:hover {
+  border-color: var(--lav);
+  box-shadow:
+    0 2px 6px rgba(23, 18, 51, 0.07),
+    0 10px 24px rgba(23, 18, 51, 0.08);
+  transform: translateY(-2px);
+}
+
+.home-cat-emoji {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.home-cat-name {
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.home-cat-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- 인기 꿈해몽 TOP ---------- */
+.home-top-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+}
+
+.home-top-list > li {
+  min-width: 0;
+}
+
+.home-top-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.home-top-row:hover {
+  border-color: var(--lav);
+  box-shadow:
+    0 2px 6px rgba(23, 18, 51, 0.07),
+    0 10px 24px rgba(23, 18, 51, 0.08);
+  transform: translateY(-2px);
+}
+
+.home-top-rank {
+  flex-shrink: 0;
+  width: 34px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  color: var(--moon);
+}
+
+.home-top-emoji {
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.home-top-body {
+  display: block;
+  min-width: 0;
+  flex: 1;
+}
+
+.home-top-title {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.home-top-intro {
+  display: block;
+  font-size: 13.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-top-row .badge {
+  flex-shrink: 0;
+}
+
+/* ---------- 하단 안내 박스 ---------- */
+.home-notice {
+  margin-top: 64px;
+  padding: 28px 30px;
+  text-align: center;
+}
+
+.home-notice-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.home-notice-text {
+  max-width: 620px;
+  margin: 10px auto 18px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width: 640px) {
+  .home-hero {
+    padding: 52px 0 60px;
+  }
+
+  .home-hero-title {
+    font-size: 27px;
+  }
+
+  .home-hero-sub {
+    font-size: 15px;
+    margin-bottom: 26px;
+  }
+
+  .home-section {
+    margin-top: 48px;
+  }
+
+  .home-section-title {
+    font-size: 22px;
+  }
+
+  .home-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-cat-card {
+    padding: 18px 16px 16px;
+  }
+
+  .home-cat-emoji {
+    font-size: 28px;
+  }
+
+  .home-cat-name {
+    font-size: 17px;
+  }
+
+  .home-top-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .home-top-rank {
+    width: 28px;
+    font-size: 24px;
+  }
+
+  .home-notice {
+    margin-top: 48px;
+    padding: 24px 20px;
+  }
+}

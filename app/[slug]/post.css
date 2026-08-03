@@ -1,0 +1,237 @@
+/* ============================================================
+   글 상세 페이지 (app/[slug]) 전용 스타일
+   ============================================================ */
+
+.post-wrap {
+  max-width: var(--maxw-article);
+  margin: 0 auto;
+  padding: 32px 20px 0;
+}
+
+/* ---------- 브레드크럼 ---------- */
+.post-crumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.crumb-sep {
+  color: var(--lav-soft);
+}
+
+.post-crumb li[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---------- 제목 · 메타 ---------- */
+.post-h1 {
+  margin-top: 14px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.42;
+  color: var(--night);
+}
+
+.post-metarow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 14px;
+}
+
+.post-meta-item {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.post-intro {
+  margin-top: 22px;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+/* ---------- 목차 ---------- */
+.post-toc {
+  margin-top: 28px;
+  padding: 20px 22px;
+}
+
+.toc-label {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--lav-soft);
+}
+
+.toc-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 22px;
+}
+
+.toc-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 4px 0;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.toc-list a:hover {
+  color: var(--night-2);
+}
+
+.toc-num {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--lav-soft);
+}
+
+.toc-list a:hover .toc-num {
+  color: var(--moon);
+}
+
+/* ---------- 본문 섹션 ---------- */
+.post-section {
+  margin-top: 40px;
+}
+
+.post-section h2 {
+  padding-left: 14px;
+  border-left: 4px solid var(--moon);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--night);
+  scroll-margin-top: 76px;
+}
+
+.post-section p {
+  margin-top: 12px;
+  line-height: 1.85;
+}
+
+/* ---------- FAQ ---------- */
+.post-faq {
+  margin-top: 56px;
+}
+
+.post-faq h2,
+.post-related h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--night);
+}
+
+.faq-item {
+  margin-top: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.post-faq h2 + .faq-item {
+  margin-top: 18px;
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.15s ease;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 19px;
+  line-height: 1;
+  color: var(--lav-soft);
+  transition: transform 0.15s ease;
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+  color: var(--moon);
+}
+
+.faq-item summary:hover {
+  background: var(--paper);
+}
+
+.faq-item p {
+  padding: 2px 18px 16px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* ---------- 관련 꿈 ---------- */
+.post-related {
+  margin-top: 56px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+/* ---------- 면책 박스 ---------- */
+.post-disclaimer {
+  margin-top: 48px;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--moon);
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width: 640px) {
+  .post-wrap {
+    padding: 24px 16px 0;
+  }
+
+  .post-h1 {
+    font-size: 24px;
+  }
+
+  .post-intro {
+    font-size: 16px;
+  }
+
+  .toc-list {
+    grid-template-columns: 1fr;
+  }
+
+  .post-section h2 {
+    font-size: 19px;
+    scroll-margin-top: 70px;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}

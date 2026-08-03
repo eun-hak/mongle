@@ -1,0 +1,340 @@
+/* ============================================================
+   꿈해몽사전 — global styles & design tokens
+   ============================================================ */
+
+:root {
+  /* 밤하늘 남색 */
+  --night: #171233;
+  --night-2: #221a4d;
+  --night-3: #2d2361;
+  /* 달빛 금색 */
+  --moon: #e9c86b;
+  --moon-soft: #f3dfa8;
+  /* 라벤더 */
+  --lav: #b19ae0;
+  --lav-soft: #8d7bb8;
+  /* 종이/잉크 */
+  --paper: #faf8f3;
+  --card: #ffffff;
+  --ink: #241f33;
+  --muted: #6f6885;
+  --line: #e7e2d9;
+
+  --radius: 12px;
+  --maxw: 1080px;
+  --maxw-article: 760px;
+}
+
+/* ---------- reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), "Noto Sans KR", -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ---------- typography / links ---------- */
+a {
+  color: var(--lav-soft);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--night-2);
+}
+
+.serif {
+  font-family: var(--font-serif), "Noto Serif KR", serif;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- layout ---------- */
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- night sky ---------- */
+.night-bg {
+  background:
+    radial-gradient(1.5px 1.5px at 12% 32%, rgba(255, 255, 255, 0.75) 50%, transparent 51%),
+    radial-gradient(2px 2px at 46% 14%, rgba(243, 223, 168, 0.85) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 74% 42%, rgba(255, 255, 255, 0.55) 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 22%, rgba(255, 255, 255, 0.65) 50%, transparent 51%),
+    linear-gradient(135deg, var(--night), var(--night-2));
+  color: #f5f2ff;
+}
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.logo:hover {
+  color: var(--moon-soft);
+}
+
+.logo-tag {
+  margin-left: 2px;
+  padding-top: 5px;
+  font-family: var(--font-sans), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--lav);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.site-nav a {
+  color: var(--lav);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.site-nav a:hover {
+  color: var(--moon);
+}
+
+/* ---------- footer ---------- */
+.site-footer {
+  margin-top: 72px;
+  padding: 40px 0 44px;
+  background: var(--night);
+  color: var(--lav);
+}
+
+.footer-disclaimer {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--lav-soft);
+  max-width: 560px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.footer-links a {
+  color: var(--lav);
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: var(--moon);
+}
+
+.footer-copy {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--lav-soft);
+}
+
+/* ---------- card ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow:
+    0 1px 3px rgba(23, 18, 51, 0.05),
+    0 4px 16px rgba(23, 18, 51, 0.04);
+}
+
+/* ---------- badge ---------- */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f1ecfa;
+  border: 1px solid #e3daf3;
+  color: var(--night-2);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--moon);
+  color: var(--night);
+}
+
+.btn-primary:hover {
+  background: var(--moon-soft);
+  color: var(--night);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--lav);
+  color: var(--night-2);
+}
+
+/* ---------- post card ---------- */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 18px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.post-card:hover {
+  border-color: var(--lav);
+  box-shadow:
+    0 2px 6px rgba(23, 18, 51, 0.07),
+    0 10px 24px rgba(23, 18, 51, 0.08);
+  transform: translateY(-2px);
+}
+
+.pc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pc-emoji {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.pc-title {
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.pc-intro {
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc-meta {
+  margin-top: auto;
+  color: var(--lav-soft);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 640px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .site-header .container {
+    height: 54px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+
+  .site-nav {
+    gap: 14px;
+  }
+
+  .site-nav a {
+    font-size: 13px;
+  }
+
+  .pc-title {
+    font-size: 17px;
+  }
+}
+
+/* 그리드 아이템이 내용물 최소폭 때문에 커지는 것 방지 (가로 오버플로우 예방) */
+.post-card {
+  min-width: 0;
+}

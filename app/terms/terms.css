@@ -1,0 +1,85 @@
+/* Privacy — 개인정보처리방침 페이지 전용 스타일 */
+
+.terms-page {
+  max-width: var(--maxw-article);
+  margin: 0 auto;
+  padding: 56px 20px 8px;
+}
+
+.terms-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--night);
+  line-height: 1.35;
+}
+
+.terms-date {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.terms-card {
+  margin-top: 28px;
+  padding: 30px 32px;
+}
+
+.terms-card section + section {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.terms-card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--night-2);
+  margin-bottom: 10px;
+}
+
+.terms-card p {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.terms-card p + p {
+  margin-top: 10px;
+}
+
+.terms-card ul {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.terms-card li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.terms-card li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 11px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lav);
+}
+
+@media (max-width: 640px) {
+  .terms-page {
+    padding-top: 40px;
+  }
+
+  .terms-title {
+    font-size: 24px;
+  }
+
+  .terms-card {
+    padding: 24px 20px;
+  }
+}

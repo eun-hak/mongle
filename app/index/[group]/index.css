@@ -1,0 +1,207 @@
+/* 가나다 색인 페이지 전용 스타일 */
+
+/* ---------- 페이지 헤더 ---------- */
+.idx-head {
+  padding: 40px 0 0;
+  text-align: center;
+}
+
+.idx-head-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--night-2);
+}
+
+.idx-head-desc {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---------- 초성 탭바 ---------- */
+.idx-tabs {
+  margin-top: 24px;
+}
+
+.idx-tabs-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.idx-tabs-list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.idx-tabs-list a:hover {
+  border-color: var(--lav);
+  color: var(--night-2);
+}
+
+.idx-tabs-list a[aria-current="page"] {
+  background: var(--night-2);
+  border-color: var(--night-2);
+  color: var(--moon);
+}
+
+/* ---------- 색인 본문 ---------- */
+.idx-section-title {
+  margin-top: 40px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--night-2);
+}
+
+.idx-section-title .idx-group-mark {
+  color: var(--lav-soft);
+}
+
+.idx-list {
+  margin-top: 16px;
+}
+
+.idx-entry {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.idx-entry:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.idx-entry-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.idx-entry-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.idx-entry-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.idx-entry-title a {
+  color: var(--ink);
+}
+
+.idx-entry-title a:hover {
+  color: var(--night-2);
+}
+
+.idx-entry-intro {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.idx-subs {
+  margin-top: 12px;
+}
+
+.idx-subs-label {
+  margin-bottom: 8px;
+  color: var(--lav-soft);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.idx-subs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.idx-subs-list a {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.idx-subs-list a:hover {
+  border-color: var(--lav);
+  color: var(--night-2);
+}
+
+/* ---------- 빈 상태 ---------- */
+.idx-empty {
+  margin-top: 32px;
+  padding: 52px 24px;
+  text-align: center;
+}
+
+.idx-empty-emoji {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.idx-empty-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--night-2);
+}
+
+.idx-empty-desc {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---------- 모바일 ---------- */
+@media (max-width: 640px) {
+  .idx-head {
+    padding-top: 30px;
+  }
+
+  .idx-head-title {
+    font-size: 25px;
+  }
+
+  .idx-tabs-list {
+    gap: 6px;
+  }
+
+  .idx-tabs-list a {
+    min-width: 38px;
+    height: 38px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+
+  .idx-section-title {
+    margin-top: 32px;
+    font-size: 19px;
+  }
+
+  .idx-entry {
+    padding: 18px 0;
+  }
+
+  .idx-entry-title {
+    font-size: 18px;
+  }
+}

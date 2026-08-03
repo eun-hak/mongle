@@ -1,0 +1,192 @@
+import { cache } from "react";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+
+/* ---------- 타입 (데이터 계약) ---------- */
+
+export type CategoryName =
+  | "동물꿈"
+  | "사람꿈"
+  | "신체꿈"
+  | "사물꿈"
+  | "자연꿈"
+  | "상황꿈"
+  | "태몽";
+
+export interface PostSection {
+  /** 영문 kebab-case 앵커 id */
+  id: string;
+  heading: string;
+  body: string;
+}
+
+export interface PostFaq {
+  q: string;
+  a: string;
+}
+
+export interface Post {
+  /** 한글 slug, 예: "뱀꿈" */
+  slug: string;
+  /** 짧은 명칭, 예: "뱀꿈" */
+  title: string;
+  /** H1용 긴 제목 */
+  headline: string;
+  category: CategoryName;
+  emoji: string;
+  /** 2-3문장 도입부 */
+  intro: string;
+  /** 예: "2026-08-01" */
+  updated: string;
+  sections: PostSection[];
+  faq: PostFaq[];
+  /** 관련 글 slug 목록 */
+  related: string[];
+  /** 검색용 변형 질문/표현 */
+  variants: string[];
+}
+
+export interface CategoryInfo {
+  name: CategoryName;
+  emoji: string;
+  slug: string;
+  description: string;
+}
+
+/* ---------- 카테고리 상수 (7종) ---------- */
+
+export const CATEGORIES: CategoryInfo[] = [
+  {
+    name: "동물꿈",
+    emoji: "🐍",
+    slug: "동물꿈",
+    description: "뱀, 돼지, 호랑이 등 동물이 나오는 꿈의 전통 풀이를 모았습니다.",
+  },
+  {
+    name: "사람꿈",
+    emoji: "👥",
+    slug: "사람꿈",
+    description: "가족, 연인, 죽은 사람 등 사람이 등장하는 꿈의 의미를 정리했습니다.",
+  },
+  {
+    name: "신체꿈",
+    emoji: "🦷",
+    slug: "신체꿈",
+    description: "이빨, 머리카락, 피 등 몸과 관련된 꿈의 풀이를 다룹니다.",
+  },
+  {
+    name: "사물꿈",
+    emoji: "👟",
+    slug: "사물꿈",
+    description: "신발, 돈, 열쇠 등 물건이 나오는 꿈의 상징을 해설합니다.",
+  },
+  {
+    name: "자연꿈",
+    emoji: "🌊",
+    slug: "자연꿈",
+    description: "물, 불, 산, 하늘 등 자연 현상이 나오는 꿈의 의미를 모았습니다.",
+  },
+  {
+    name: "상황꿈",
+    emoji: "🚗",
+    slug: "상황꿈",
+    description: "쫓기거나 떨어지는 등 특정 상황을 겪는 꿈의 풀이를 정리했습니다.",
+  },
+  {
+    name: "태몽",
+    emoji: "👶",
+    slug: "태몽",
+    description: "임신과 출산을 암시한다고 전해지는 태몽의 상징을 다룹니다.",
+  },
+];
+
+/* ---------- 데이터 접근 (DynamoDB) ----------
+ * 테이블: content — PK="SITE#<사이트>", SK="POST#<slug>"
+ * ISR 캐시 뒤에서만 호출되므로 실제 읽기는 페이지 생성 시 1회 수준.
+ */
+
+const SITE = process.env.SITE_ID ?? "mongle";
+const TABLE = process.env.DDB_TABLE ?? "content";
+const PK = `SITE#${SITE}`;
+
+const doc = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+
+/** DynamoDB 아이템에서 내부 키를 제거하고 Post로 변환 */
+function toPost(item: Record<string, unknown>): Post {
+  const { PK: _pk, SK: _sk, status: _status, ...rest } = item;
+  return rest as unknown as Post;
+}
+
+/** 전체 글 조회 — 같은 렌더 안에서는 React cache로 중복 호출 제거 */
+export const getAllPosts = cache(async (): Promise<Post[]> => {
+  const items: Record<string, unknown>[] = [];
+  let ExclusiveStartKey: Record<string, unknown> | undefined;
+  do {
+    const res = await doc.send(new QueryCommand({
+      TableName: TABLE,
+      KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
+      ExpressionAttributeValues: { ":pk": PK, ":sk": "POST#" },
+      ExclusiveStartKey,
+    }));
+    items.push(...(res.Items ?? []));
+    ExclusiveStartKey = res.LastEvaluatedKey as typeof ExclusiveStartKey;
+  } while (ExclusiveStartKey);
+  return items.map(toPost);
+});
+
+export async function getPost(slug: string): Promise<Post | undefined> {
+  const { Item } = await doc.send(new GetCommand({
+    TableName: TABLE,
+    Key: { PK, SK: `POST#${slug}` },
+  }));
+  return Item ? toPost(Item) : undefined;
+}
+
+export async function getPostsByCategory(name: string): Promise<Post[]> {
+  return (await getAllPosts()).filter((p) => p.category === name);
+}
+
+/* ---------- 초성 유틸 ---------- */
+
+/** 색인에 쓰는 초성 14자 (쌍자음은 평음으로 합침) */
+export const CHOSUNG = [
+  "ㄱ",
+  "ㄴ",
+  "ㄷ",
+  "ㄹ",
+  "ㅁ",
+  "ㅂ",
+  "ㅅ",
+  "ㅇ",
+  "ㅈ",
+  "ㅊ",
+  "ㅋ",
+  "ㅌ",
+  "ㅍ",
+  "ㅎ",
+] as const;
+
+const CHOSUNG_FULL = [
+  "ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ",
+  "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ",
+];
+
+const DOUBLE_TO_PLAIN: Record<string, string> = {
+  "ㄲ": "ㄱ",
+  "ㄸ": "ㄷ",
+  "ㅃ": "ㅂ",
+  "ㅆ": "ㅅ",
+  "ㅉ": "ㅈ",
+};
+
+/**
+ * 단어 첫 글자의 초성을 반환한다 (쌍자음은 평음으로).
+ * 한글 음절이 아니면 첫 글자를 그대로 반환한다.
+ */
+export function getChosung(word: string): string {
+  const ch = word.charAt(0);
+  const code = ch.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) return ch;
+  const cho = CHOSUNG_FULL[Math.floor((code - 0xac00) / 588)];
+  return DOUBLE_TO_PLAIN[cho] ?? cho;
+}

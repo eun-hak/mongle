@@ -1,0 +1,72 @@
+/* 404 — 밤하늘 not-found 페이지 전용 스타일 */
+
+.nf-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 62vh;
+  padding: 80px 20px;
+}
+
+.nf-moon {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 0 24px rgba(233, 200, 107, 0.35));
+}
+
+.nf-title {
+  margin-top: 26px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+}
+
+.nf-desc {
+  margin-top: 12px;
+  max-width: 440px;
+  font-size: 16px;
+  color: var(--lav);
+}
+
+.nf-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 어두운 배경 위 고스트 버튼 (전역 .btn-ghost는 밝은 배경용) */
+.nf-btn-ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--lav);
+}
+
+.nf-btn-ghost:hover {
+  border-color: var(--moon);
+  color: var(--moon);
+}
+
+@media (max-width: 640px) {
+  .nf-hero {
+    min-height: 54vh;
+    padding: 60px 16px;
+  }
+
+  .nf-moon {
+    width: 58px;
+    height: 58px;
+  }
+
+  .nf-title {
+    font-size: 26px;
+  }
+
+  .nf-desc {
+    font-size: 15px;
+  }
+}

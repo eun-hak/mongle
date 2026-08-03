@@ -1,0 +1,90 @@
+/* About — 소개 페이지 전용 스타일 */
+
+.about-page {
+  max-width: var(--maxw-article);
+  margin: 0 auto;
+  padding: 56px 20px 8px;
+}
+
+.about-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--night);
+  line-height: 1.35;
+}
+
+.about-lead {
+  margin-top: 14px;
+  font-size: 17px;
+  color: var(--muted);
+}
+
+.about-card {
+  margin-top: 28px;
+  padding: 28px 30px;
+}
+
+.about-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--night-2);
+  margin-bottom: 12px;
+}
+
+.about-card p {
+  color: var(--ink);
+  font-size: 15.5px;
+}
+
+.about-card p + p {
+  margin-top: 12px;
+}
+
+.about-principles {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.about-principles li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+.about-principles li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--moon);
+}
+
+.about-note {
+  margin-top: 28px;
+  padding: 18px 22px;
+  border-radius: var(--radius);
+  background: #f1ecfa;
+  border: 1px solid #e3daf3;
+  color: var(--night-2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .about-page {
+    padding-top: 40px;
+  }
+
+  .about-title {
+    font-size: 26px;
+  }
+
+  .about-card {
+    padding: 22px 20px;
+  }
+}
