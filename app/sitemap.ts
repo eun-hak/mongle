@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts, CATEGORIES, CHOSUNG } from "@/lib/posts";
 
-// TODO: 실제 도메인 확정 후 교체
 const BASE_URL = "https://mongle.plentyer.com";
+
+// 공장이 DynamoDB에 새 글을 넣으면 1시간 내 사이트맵에 자동 반영
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
