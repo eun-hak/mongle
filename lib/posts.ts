@@ -132,6 +132,11 @@ function toPost(item: Record<string, unknown>): Post {
   return rest as unknown as Post;
 }
 
+/** 발행 상태인 글만 노출 (review/draft는 공장 검수 전이므로 숨김) */
+function isPublished(item: Record<string, unknown>): boolean {
+  return (item.status ?? "published") === "published";
+}
+
 /** 전체 글 조회 — 같은 렌더 안에서는 React cache로 중복 호출 제거 */
 export const getAllPosts = cache(async (): Promise<Post[]> => {
   const items: Record<string, unknown>[] = [];
@@ -146,7 +151,7 @@ export const getAllPosts = cache(async (): Promise<Post[]> => {
     items.push(...(res.Items ?? []));
     ExclusiveStartKey = res.LastEvaluatedKey as typeof ExclusiveStartKey;
   } while (ExclusiveStartKey);
-  return items.map(toPost);
+  return items.filter(isPublished).map(toPost);
 });
 
 export async function getPost(slug: string): Promise<Post | undefined> {
@@ -154,7 +159,7 @@ export async function getPost(slug: string): Promise<Post | undefined> {
     TableName: TABLE,
     Key: { PK, SK: `POST#${slug}` },
   }));
-  return Item ? toPost(Item) : undefined;
+  return Item && isPublished(Item) ? toPost(Item) : undefined;
 }
 
 export async function getPostsByCategory(name: string): Promise<Post[]> {
