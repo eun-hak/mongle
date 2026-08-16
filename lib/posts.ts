@@ -46,6 +46,11 @@ export interface Post {
   variants: string[];
 }
 
+/** 목록용 슬림 글 — 본문(sections/faq)을 제외한 필드만.
+ *  LIST#<slug> 아이템으로 별도 저장되어 목록 페이지가 파티션의
+ *  본문 전체를 읽지 않게 한다 (RCU 스로틀 방지). */
+export type PostMeta = Omit<Post, "sections" | "faq" | "related">;
+
 export interface CategoryInfo {
   name: CategoryName;
   emoji: string;
@@ -137,21 +142,26 @@ function isPublished(item: Record<string, unknown>): boolean {
   return (item.status ?? "published") === "published";
 }
 
-/** 전체 글 조회 — 같은 렌더 안에서는 React cache로 중복 호출 제거 */
-export const getAllPosts = cache(async (): Promise<Post[]> => {
+/** 전체 글의 목록용 슬림 아이템(LIST#) 조회 — 같은 렌더 안에서는 React cache로 중복 호출 제거.
+ *  LIST# 는 발행(published) 시에만 기록되므로 status 필터가 필요 없다.
+ *  본문 포함 전체 조회(구 getAllPosts)는 25 RCU 테이블에서 스로틀을 일으켜 제거했다. */
+export const getAllPostMetas = cache(async (): Promise<PostMeta[]> => {
   const items: Record<string, unknown>[] = [];
   let ExclusiveStartKey: Record<string, unknown> | undefined;
   do {
     const res = await doc.send(new QueryCommand({
       TableName: TABLE,
       KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
-      ExpressionAttributeValues: { ":pk": PK, ":sk": "POST#" },
+      ExpressionAttributeValues: { ":pk": PK, ":sk": "LIST#" },
       ExclusiveStartKey,
     }));
     items.push(...(res.Items ?? []));
     ExclusiveStartKey = res.LastEvaluatedKey as typeof ExclusiveStartKey;
   } while (ExclusiveStartKey);
-  return items.filter(isPublished).map(toPost);
+  return items.map((item) => {
+    const { PK: _pk, SK: _sk, naverSubmitted: _ns, ...rest } = item;
+    return rest as unknown as PostMeta;
+  });
 });
 
 export async function getPost(slug: string): Promise<Post | undefined> {
@@ -162,8 +172,8 @@ export async function getPost(slug: string): Promise<Post | undefined> {
   return Item && isPublished(Item) ? toPost(Item) : undefined;
 }
 
-export async function getPostsByCategory(name: string): Promise<Post[]> {
-  return (await getAllPosts()).filter((p) => p.category === name);
+export async function getPostsByCategory(name: string): Promise<PostMeta[]> {
+  return (await getAllPostMetas()).filter((p) => p.category === name);
 }
 
 /* ---------- 초성 유틸 ---------- */

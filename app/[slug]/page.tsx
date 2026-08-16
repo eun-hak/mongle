@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PostCard from "@/components/PostCard";
-import { CATEGORIES, getAllPosts, getPost, type Post } from "@/lib/posts";
+import { CATEGORIES, getPost, type Post } from "@/lib/posts";
 import "./post.css";
 
 interface PageProps {

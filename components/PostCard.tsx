@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { Post } from "@/lib/posts";
+import type { PostMeta } from "@/lib/posts";
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post }: { post: PostMeta }) {
   return (
     <Link href={`/${post.slug}`} className="card post-card">
       <div className="pc-head">

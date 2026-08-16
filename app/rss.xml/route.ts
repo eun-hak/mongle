@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/lib/posts";
+import { getAllPostMetas } from "@/lib/posts";
 
 const BASE_URL = "https://mongle.plentyer.com";
 
@@ -10,7 +10,7 @@ function esc(s: string) {
 }
 
 export async function GET() {
-  const posts = (await getAllPosts())
+  const posts = (await getAllPostMetas())
     .sort((a, b) => (a.updated < b.updated ? 1 : -1))
     .slice(0, 100);
 

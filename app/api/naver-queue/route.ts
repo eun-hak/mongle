@@ -40,21 +40,22 @@ export async function GET(req: NextRequest) {
   const dryrun = p.get("dryrun") === "1";
   const resend = p.get("resend");
 
-  // 전체 발행 글 스캔 (수백~수천 건 규모라 쿼리 몇 페이지면 충분)
+  // 목록용 슬림 아이템(LIST#) 스캔 — 발행 글만 존재하고 본문이 없어
+  // 전체를 읽어도 RCU 부담이 작다 (구 POST# 전체 스캔은 스로틀 유발로 교체)
   const items: Record<string, any>[] = [];
   let lek: Record<string, any> | undefined;
   do {
     const res = await doc.send(new QueryCommand({
       TableName: TABLE,
       KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
-      ExpressionAttributeValues: { ":pk": PK, ":sk": "POST#" },
+      ExpressionAttributeValues: { ":pk": PK, ":sk": "LIST#" },
       ExclusiveStartKey: lek,
     }));
     items.push(...(res.Items ?? []));
     lek = res.LastEvaluatedKey as typeof lek;
   } while (lek);
 
-  const published = items.filter((i) => (i.status ?? "published") === "published");
+  const published = items; // LIST# 는 발행 시에만 기록된다
 
   let batch: Record<string, any>[];
   if (resend) {

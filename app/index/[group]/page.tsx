@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CHOSUNG, getAllPosts, getChosung } from "@/lib/posts";
+import { CHOSUNG, getAllPostMetas, getChosung } from "@/lib/posts";
 import "./index.css";
 
 // 새 글 반영: 1시간 주기 재생성
@@ -34,7 +34,7 @@ export default async function IndexGroupPage({ params }: IndexPageProps) {
   const chosung = decodeURIComponent(group);
   if (!(CHOSUNG as readonly string[]).includes(chosung)) notFound();
 
-  const entries = (await getAllPosts())
+  const entries = (await getAllPostMetas())
     .filter((post) => getChosung(post.title) === chosung)
     .sort((a, b) => a.title.localeCompare(b.title, "ko"))
     .map((post) => ({
