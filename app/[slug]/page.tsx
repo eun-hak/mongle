@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PostCard from "@/components/PostCard";
-import { CATEGORIES, getPost, type Post } from "@/lib/posts";
+import { CATEGORIES, getPost, getPostMetasBySlugs, type Post } from "@/lib/posts";
 import "./post.css";
 
 interface PageProps {
@@ -65,9 +65,7 @@ export default async function PostPage({ params }: PageProps) {
   const categoryEmoji =
     CATEGORIES.find((c) => c.name === post.category)?.emoji ?? post.emoji;
 
-  const relatedPosts = (await Promise.all(post.related.map((s) => getPost(s))))
-    .filter((p): p is Post => Boolean(p))
-    .slice(0, 3);
+  const relatedPosts = (await getPostMetasBySlugs(post.related)).slice(0, 3);
 
   const articleLd = {
     "@context": "https://schema.org",

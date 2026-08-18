@@ -239,6 +239,22 @@ export async function getPost(slug: string): Promise<Post | undefined> {
   return Item && isPublished(Item) ? toPost(Item) : undefined;
 }
 
+/** 관련 글 카드용 슬림 조회 — 본문(7KB) 대신 LIST# 아이템(~1KB)만 읽는다.
+ *  LIST#는 발행 글에만 존재하므로 미발행은 자연히 걸러진다. */
+export async function getPostMetasBySlugs(slugs: string[]): Promise<PostMeta[]> {
+  const results = await Promise.all(
+    slugs.map((s) =>
+      doc.send(new GetCommand({ TableName: TABLE, Key: { PK, SK: `LIST#${s}` } }))
+    )
+  );
+  return results
+    .filter((r) => r.Item)
+    .map((r) => {
+      const { PK: _pk, SK: _sk, naverSubmitted: _ns, ...rest } = r.Item!;
+      return rest as unknown as PostMeta;
+    });
+}
+
 export async function getPostsByCategory(name: string): Promise<PostMeta[]> {
   return (await getAllPostMetas()).filter((p) => p.category === name);
 }
