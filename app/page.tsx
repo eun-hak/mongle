@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SearchBox from "@/components/SearchBox";
-import { CATEGORIES, getAllPostMetas } from "@/lib/posts";
+import { CATEGORIES, getRecentMetas, getSearchTitles } from "@/lib/posts";
 import "./home.css";
 
 export const metadata: Metadata = {
@@ -15,17 +15,17 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const posts = await getAllPostMetas();
+  const [recent, titles] = await Promise.all([getRecentMetas(), getSearchTitles()]);
 
-  const searchItems = posts.map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    variants: p.variants,
-    category: p.category,
+  const searchItems = titles.map((t) => ({
+    slug: t.slug,
+    title: t.title,
+    variants: [] as string[],
+    category: t.category,
   }));
 
-  const popularChips = posts.slice(0, 8);
-  const topPosts = posts.slice(0, 8);
+  const popularChips = recent.slice(0, 8);
+  const topPosts = recent.slice(0, 8);
 
   return (
     <>

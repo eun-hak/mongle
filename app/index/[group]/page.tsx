@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CHOSUNG, getAllPostMetas, getChosung } from "@/lib/posts";
+import { CHOSUNG, getIndexGroup } from "@/lib/posts";
 import "./index.css";
 
 // 새 글 반영: 1시간 주기 재생성
@@ -34,13 +34,10 @@ export default async function IndexGroupPage({ params }: IndexPageProps) {
   const chosung = decodeURIComponent(group);
   if (!(CHOSUNG as readonly string[]).includes(chosung)) notFound();
 
-  const entries = (await getAllPostMetas())
-    .filter((post) => getChosung(post.title) === chosung)
-    .sort((a, b) => a.title.localeCompare(b.title, "ko"))
-    .map((post) => ({
-      post,
-      subs: post.variants.filter((v) => getChosung(v) === chosung),
-    }));
+  const entries = (await getIndexGroup(chosung)).map((e) => ({
+    post: { slug: e.slug, title: e.title, emoji: e.emoji, category: e.category, intro: e.intro },
+    subs: e.subs,
+  }));
 
   return (
     <div className="container">

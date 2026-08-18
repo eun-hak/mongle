@@ -164,6 +164,73 @@ export const getAllPostMetas = cache(async (): Promise<PostMeta[]> => {
   });
 });
 
+/* ---------- 사전집계 블록 (공장 rebuild_blocks.py가 기록) ----------
+ * 목록 페이지가 LIST# 전체 스캔(2,400건+ ≈ 3MB) 대신 블록 1~2개만 읽어
+ * 25 RCU 프리티어에서 스로틀 없이 동작하게 한다. */
+
+interface LiteMeta { s: string; t: string; h: string; e: string; i: string; c: string; u: string; v: number }
+
+function liteToMeta(l: LiteMeta): PostMeta {
+  return {
+    slug: l.s, title: l.t, headline: l.h, emoji: l.e, intro: l.i,
+    category: l.c as CategoryName, updated: l.u,
+    variants: new Array<string>(l.v ?? 0).fill(""), // 목록은 개수만 필요
+  };
+}
+
+const getBlock = cache(async (sk: string): Promise<any | null> => {
+  const { Item } = await doc.send(new GetCommand({ TableName: TABLE, Key: { PK, SK: sk } }));
+  return Item?.b ? JSON.parse(Item.b as string) : null;
+});
+
+const getBlocksByPrefix = cache(async (prefix: string): Promise<any[]> => {
+  const out: any[] = [];
+  let ExclusiveStartKey: Record<string, unknown> | undefined;
+  do {
+    const res = await doc.send(new QueryCommand({
+      TableName: TABLE,
+      KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
+      ExpressionAttributeValues: { ":pk": PK, ":sk": prefix },
+      ExclusiveStartKey,
+    }));
+    for (const it of res.Items ?? []) if (it.b) out.push(JSON.parse(it.b as string));
+    ExclusiveStartKey = res.LastEvaluatedKey as typeof ExclusiveStartKey;
+  } while (ExclusiveStartKey);
+  return out;
+});
+
+/** 최신 100편 (홈·RSS) */
+export const getRecentMetas = cache(async (): Promise<PostMeta[]> => {
+  const b = await getBlock("BLOCK#RECENT");
+  return (b?.metas ?? []).map(liteToMeta);
+});
+
+/** 검색창용 전체 제목 목록 */
+export const getSearchTitles = cache(async (): Promise<{ slug: string; title: string; category: string }[]> => {
+  const blocks = await getBlocksByPrefix("BLOCK#TITLES#");
+  return blocks.flatMap((b) => (b.items ?? []).map((x: any) => ({ slug: x.s, title: x.t, category: x.c })));
+});
+
+/** 카테고리 페이지: 최신순 상위 + 전체 개수 */
+export async function getCategoryBlock(name: string): Promise<{ metas: PostMeta[]; total: number }> {
+  const b = await getBlock(`BLOCK#CAT#${name}`);
+  return { metas: (b?.metas ?? []).map(liteToMeta), total: b?.total ?? 0 };
+}
+
+/** 초성 색인: 해당 초성의 표제어 + 세부질문 일부 */
+export async function getIndexGroup(g: string): Promise<{ slug: string; title: string; emoji: string; category: string; intro: string; subs: string[] }[]> {
+  const b = await getBlock(`BLOCK#IDX#${g}`);
+  return (b?.entries ?? []).map((x: any) => ({
+    slug: x.s, title: x.t, emoji: x.e ?? "🌙", category: x.c ?? "", intro: x.i ?? "", subs: x.vs ?? [],
+  }));
+}
+
+/** 사이트맵: 슬러그+날짜 전체 */
+export async function getSitemapEntries(): Promise<{ slug: string; updated: string }[]> {
+  const blocks = await getBlocksByPrefix("BLOCK#SITEMAP#");
+  return blocks.flatMap((b) => (b.entries ?? []).map((x: any) => ({ slug: x.s, updated: x.u })));
+}
+
 export async function getPost(slug: string): Promise<Post | undefined> {
   const { Item } = await doc.send(new GetCommand({
     TableName: TABLE,

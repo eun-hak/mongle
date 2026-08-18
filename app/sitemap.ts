@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPostMetas, CATEGORIES, CHOSUNG } from "@/lib/posts";
+import { getSitemapEntries, CATEGORIES, CHOSUNG } from "@/lib/posts";
 
 const BASE_URL = "https://mongle.plentyer.com";
 
@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const posts: MetadataRoute.Sitemap = (await getAllPostMetas()).map((post) => ({
+  const posts: MetadataRoute.Sitemap = (await getSitemapEntries()).map((post) => ({
     url: `${BASE_URL}/${encodeURIComponent(post.slug)}`,
     lastModified: new Date(post.updated),
     changeFrequency: "monthly",

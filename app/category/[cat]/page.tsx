@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PostCard from "@/components/PostCard";
-import { CATEGORIES, getPostsByCategory } from "@/lib/posts";
+import { CATEGORIES, getCategoryBlock } from "@/lib/posts";
 import "./category.css";
 
 // 새 글 반영: 1시간 주기 재생성
@@ -37,7 +37,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const info = CATEGORIES.find((c) => c.name === name);
   if (!info) notFound();
 
-  const posts = await getPostsByCategory(info.name);
+  const { metas: posts, total } = await getCategoryBlock(info.name);
   const others = CATEGORIES.filter((c) => c.name !== info.name);
 
   return (
@@ -56,7 +56,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {posts.length > 0 ? (
           <>
             <p className="cat-count">
-              총 <strong>{posts.length}</strong>개의 해몽 항목이 정리되어
+              총 <strong>{total}</strong>개의 해몽 항목이 정리되어
               있습니다.
             </p>
             <ul className="cat-grid">
