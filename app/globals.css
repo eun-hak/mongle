@@ -295,9 +295,11 @@ a:hover {
 .pc-intro {
   color: var(--muted);
   font-size: 14px;
-  white-space: nowrap;
+  /* nowrap은 카드 최소폭을 문장 길이로 키워 모바일 그리드를 뚫는다 — 2줄 클램프로 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .pc-meta {
@@ -336,5 +338,13 @@ a:hover {
 
 /* 그리드 아이템이 내용물 최소폭 때문에 커지는 것 방지 (가로 오버플로우 예방) */
 .post-card {
+  min-width: 0;
+}
+
+/* 그리드·리스트 아이템 축소 허용 — 내용물 최소폭이 레이아웃을 뚫는 것 방지 (전 페이지 공통 가드) */
+.cat-grid > li,
+.idx-list > li,
+.related-grid > *,
+.home-top-list > li {
   min-width: 0;
 }
