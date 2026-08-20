@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -56,6 +57,7 @@ export const metadata: Metadata = {
     google: "nGLC6wqeingyxdWpDtTR9DKlBw7TNDT9A8_l8PrHWt0",
     other: {
       "naver-site-verification": "f8d4d51c35f760b8179bbe798cc14df41034b939",
+      "google-adsense-account": "ca-pub-1410200096892996",
     },
   },
 };
@@ -102,6 +104,13 @@ gtag('config', '${GA_ID}');`,
         <Header />
         <main>{children}</main>
         <Footer />
+        {/* AdSense 자동광고 — body 끝, hydration 이후 로드 */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1410200096892996"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
