@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import SearchBox from "@/components/SearchBox";
 import { CATEGORIES, getRecentMetas, getSearchTitles } from "@/lib/posts";
 import "./home.css";
@@ -40,9 +39,9 @@ export default async function HomePage() {
           <div className="home-hero-chips" aria-label="인기 검색어">
             <span className="home-chip-label">인기 검색</span>
             {popularChips.map((p) => (
-              <Link key={p.slug} href={`/${p.slug}`} className="home-chip">
+              <a key={p.slug} href={`/${p.slug}`} className="home-chip">
                 #{p.title}
-              </Link>
+              </a>
             ))}
           </div>
         </div>
@@ -59,7 +58,7 @@ export default async function HomePage() {
           </p>
           <div className="home-cat-grid">
             {CATEGORIES.map((cat) => (
-              <Link
+              <a
                 key={cat.name}
                 href={`/category/${cat.slug}`}
                 className="card home-cat-card"
@@ -69,7 +68,7 @@ export default async function HomePage() {
                 </span>
                 <h3 className="serif home-cat-name">{cat.name}</h3>
                 <p className="home-cat-desc">{cat.description}</p>
-              </Link>
+              </a>
             ))}
           </div>
         </section>
@@ -85,7 +84,7 @@ export default async function HomePage() {
           <ol className="home-top-list">
             {topPosts.map((post, i) => (
               <li key={post.slug}>
-                <Link href={`/${post.slug}`} className="card home-top-row">
+                <a href={`/${post.slug}`} className="card home-top-row">
                   <span className="serif home-top-rank" aria-hidden="true">
                     {i + 1}
                   </span>
@@ -97,7 +96,7 @@ export default async function HomePage() {
                     <span className="home-top-intro">{post.intro}</span>
                   </span>
                   <span className="badge">{post.category}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ol>
@@ -113,9 +112,9 @@ export default async function HomePage() {
             해몽 풀이를 표제어별로 정리한 사전형 레퍼런스 사이트입니다. 찾는
             꿈이 있다면 검색창이나 꿈사전에서 바로 확인해 보세요.
           </p>
-          <Link href="/index/ㄱ" className="btn btn-primary">
+          <a href="/index/ㄱ" className="btn btn-primary">
             꿈사전 열어보기
-          </Link>
+          </a>
         </section>
       </div>
     </>

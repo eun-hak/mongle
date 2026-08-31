@@ -1,9 +1,8 @@
-import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 
 export default function PostCard({ post }: { post: PostMeta }) {
   return (
-    <Link href={`/${post.slug}`} className="card post-card">
+    <a href={`/${post.slug}`} className="card post-card">
       <div className="pc-head">
         <span className="pc-emoji" aria-hidden="true">
           {post.emoji}
@@ -13,6 +12,6 @@ export default function PostCard({ post }: { post: PostMeta }) {
       <h3 className="pc-title serif">{post.title}</h3>
       <p className="pc-intro">{post.intro}</p>
       <p className="pc-meta">관련 질문 {post.variants.length}가지</p>
-    </Link>
+    </a>
   );
 }

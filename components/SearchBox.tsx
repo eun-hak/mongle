@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import "./searchbox.css";
 
 export interface SearchItem {
@@ -73,10 +72,10 @@ export default function SearchBox({ items }: { items: SearchItem[] }) {
         >
           {results.map((item) => (
             <li key={item.slug} role="option" aria-selected={false}>
-              <Link href={`/${item.slug}`} onClick={() => setOpen(false)}>
+              <a href={`/${item.slug}`} onClick={() => setOpen(false)}>
                 <span className="sb-title">{item.title}</span>
                 <span className="sb-cat">{item.category}</span>
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

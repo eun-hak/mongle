@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CHOSUNG, getIndexGroup } from "@/lib/posts";
 import "./index.css";
@@ -52,12 +51,12 @@ export default async function IndexGroupPage({ params }: IndexPageProps) {
         <ul className="idx-tabs-list">
           {CHOSUNG.map((c) => (
             <li key={c}>
-              <Link
+              <a
                 href={`/index/${c}`}
                 aria-current={c === chosung ? "page" : undefined}
               >
                 {c}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>
@@ -76,7 +75,7 @@ export default async function IndexGroupPage({ params }: IndexPageProps) {
                   {post.emoji}
                 </span>
                 <h3 className="idx-entry-title serif">
-                  <Link href={`/${post.slug}`}>{post.title}</Link>
+                  <a href={`/${post.slug}`}>{post.title}</a>
                 </h3>
                 <span className="badge">{post.category}</span>
               </div>
@@ -87,7 +86,7 @@ export default async function IndexGroupPage({ params }: IndexPageProps) {
                   <ul className="idx-subs-list">
                     {subs.map((variant) => (
                       <li key={variant}>
-                        <Link href={`/${post.slug}`}>{variant}</Link>
+                        <a href={`/${post.slug}`}>{variant}</a>
                       </li>
                     ))}
                   </ul>

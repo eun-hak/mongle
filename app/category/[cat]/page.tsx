@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import PostCard from "@/components/PostCard";
 import { CATEGORIES, getCategoryBlock } from "@/lib/posts";
@@ -79,10 +78,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </p>
             <div className="cat-empty-links">
               {others.map((c) => (
-                <Link key={c.name} href={`/category/${c.name}`}>
+                <a key={c.name} href={`/category/${c.name}`}>
                   <span aria-hidden="true">{c.emoji}</span>
                   {c.name}
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -93,13 +92,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <ul className="cat-nav-list">
             {CATEGORIES.map((c) => (
               <li key={c.name}>
-                <Link
+                <a
                   href={`/category/${c.name}`}
                   aria-current={c.name === info.name ? "page" : undefined}
                 >
                   <span aria-hidden="true">{c.emoji}</span>
                   {c.name}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

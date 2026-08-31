@@ -1,10 +1,9 @@
-import Link from "next/link";
 
 export default function Header() {
   return (
     <header className="site-header night-bg">
       <div className="container">
-        <Link href="/" className="logo serif" aria-label="몽글 홈으로">
+        <a href="/" className="logo serif" aria-label="몽글 홈으로">
           <svg
             width="22"
             height="22"
@@ -22,11 +21,11 @@ export default function Header() {
           </svg>
           몽글
           <span className="logo-tag">꿈사전</span>
-        </Link>
+        </a>
         <nav className="site-nav" aria-label="주요 메뉴">
-          <Link href="/">홈</Link>
-          <Link href="/index/ㄱ">꿈사전</Link>
-          <Link href="/about">소개</Link>
+          <a href="/">홈</a>
+          <a href="/index/ㄱ">꿈사전</a>
+          <a href="/about">소개</a>
         </nav>
       </div>
     </header>

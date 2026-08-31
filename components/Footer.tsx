@@ -1,4 +1,3 @@
-import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -9,9 +8,9 @@ export default function Footer() {
           사실이 아닙니다.
         </p>
         <div className="footer-links">
-          <Link href="/about">소개</Link>
-          <Link href="/terms">이용약관</Link>
-          <Link href="/privacy">개인정보처리방침</Link>
+          <a href="/about">소개</a>
+          <a href="/terms">이용약관</a>
+          <a href="/privacy">개인정보처리방침</a>
         </div>
         <p className="footer-copy">© 2026 몽글</p>
       </div>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import "./not-found.css";
 
 export default function NotFound() {
@@ -25,12 +24,12 @@ export default function NotFound() {
           검색하거나, 꿈사전에서 꿈을 찾아보세요.
         </p>
         <div className="nf-actions">
-          <Link href="/" className="btn btn-primary">
+          <a href="/" className="btn btn-primary">
             홈으로 가기
-          </Link>
-          <Link href="/index/ㄱ" className="btn nf-btn-ghost">
+          </a>
+          <a href="/index/ㄱ" className="btn nf-btn-ghost">
             꿈사전 보기
-          </Link>
+          </a>
         </div>
       </div>
     </div>

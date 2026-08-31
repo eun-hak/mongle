@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import PostCard from "@/components/PostCard";
 import { CATEGORIES, getPost, getPostMetasBySlugs, type Post } from "@/lib/posts";
@@ -101,7 +100,7 @@ export default async function PostPage({ params }: PageProps) {
         <nav className="post-crumb" aria-label="현재 위치">
           <ol>
             <li>
-              <Link href="/">홈</Link>
+              <a href="/">홈</a>
             </li>
             <li className="crumb-sep" aria-hidden="true">
               ›
