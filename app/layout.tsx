@@ -58,6 +58,7 @@ export const metadata: Metadata = {
     other: {
       "naver-site-verification": "f8d4d51c35f760b8179bbe798cc14df41034b939",
       "google-adsense-account": "ca-pub-1410200096892996",
+      "msvalidate.01": "112BB0292D8A2BCD2A6CA3E7C8C100B4",
     },
   },
 };
@@ -104,6 +105,17 @@ gtag('config', '${GA_ID}');`,
         <Header />
         <main>{children}</main>
         <Footer />
+        {/* 네이버 애널리틱스 — wcslog.js 로드 완료 후 wcs_do() 실행 (next/script는 로드 순서를 보장하지 않음) */}
+        <Script
+          id="naver-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `if(!window.wcs_add) window.wcs_add = {};
+wcs_add["wa"] = "2601d958d413ba0";
+(function(){var s=document.createElement("script");s.src="https://wcs.pstatic.net/wcslog.js";s.async=true;
+s.onload=function(){if(window.wcs){wcs_do();}};document.body.appendChild(s);})();`,
+          }}
+        />
         {/* AdSense 자동광고 — body 끝, hydration 이후 로드 */}
         <Script
           async
