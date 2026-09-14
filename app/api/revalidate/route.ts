@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
-  const paths = ["/", "/sitemap.xml"];
+  const paths = ["/", "/sitemap.xml", "/rss.xml"];
   for (const slug of slugs ?? []) {
     paths.push(`/${encodeURIComponent(slug)}`);
     paths.push(`/${slug}`);

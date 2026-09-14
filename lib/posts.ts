@@ -217,12 +217,14 @@ export async function getCategoryBlock(name: string): Promise<{ metas: PostMeta[
   return { metas: (b?.metas ?? []).map(liteToMeta), total: b?.total ?? 0 };
 }
 
-/** 초성 색인: 해당 초성의 표제어 + 세부질문 일부 */
+/** 초성 색인: 해당 초성의 표제어 + 세부질문 일부.
+ *  초성 하나가 400KB(아이템 한도)를 넘어 BLOCK#IDX#ㅇ#000, #001… 청크로 나뉘므로 prefix로 모아 읽는다.
+ *  (청크 이전의 단일 키 BLOCK#IDX#ㅇ 도 같은 prefix에 걸려 호환된다) */
 export async function getIndexGroup(g: string): Promise<{ slug: string; title: string; emoji: string; category: string; intro: string; subs: string[] }[]> {
-  const b = await getBlock(`BLOCK#IDX#${g}`);
-  return (b?.entries ?? []).map((x: any) => ({
+  const blocks = await getBlocksByPrefix(`BLOCK#IDX#${g}`);
+  return blocks.flatMap((b) => (b.entries ?? []).map((x: any) => ({
     slug: x.s, title: x.t, emoji: x.e ?? "🌙", category: x.c ?? "", intro: x.i ?? "", subs: x.vs ?? [],
-  }));
+  })));
 }
 
 /** 사이트맵: 슬러그+날짜 전체 */
