@@ -1,96 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { NextResponse } from "next/server";
 
 /**
- * 네이버 수집요청용 URL 큐 — 외부 제출 서버가 매일 가져가는 엔드포인트.
+ * (중단됨) 네이버 수집요청용 URL 큐.
  *
- * GET /api/naver-queue?key=<REVALIDATE_SECRET>&limit=50
- *   → 아직 제출 안 된 발행 글 중 오래된 순 50개를 반환하고 '제출됨(오늘 날짜)'으로 마킹
- *
- * 옵션:
- *   &format=json      기본 txt(줄당 URL 1개) 대신 JSON
- *   &dryrun=1         마킹 없이 미리보기
- *   &resend=YYYY-MM-DD  그날 내줬던 배치를 다시 반환 (제출 실패 복구용)
+ * 2026-09-17 제출 서버가 sitemap.xml + 자체 누적 장부 방식으로 전환해 더 이상 이 API를 부르지 않는다.
+ * 옛 구현은 호출마다 LIST# 전체(11,000+건, ~1,650 RCU)를 읽어 25 RCU 공유 테이블의 분당 한도를
+ * 넘겼고, 그날 제출분 50건이 통째로 누락되는 500을 냈다. 실수로 한 번만 호출돼도 같은 부하가
+ * 재현되므로 DB를 전혀 읽지 않는 안내 응답만 남긴다. 제출 이력은 제출 서버 장부에 있다.
  */
+export const dynamic = "force-dynamic";
 
-const BASE_URL = "https://mongle.plentyer.com";
-const SITE = process.env.SITE_ID ?? "mongle";
-const TABLE = process.env.DDB_TABLE ?? "content";
-const PK = `SITE#${SITE}`;
-
-const doc = DynamoDBDocumentClient.from(
-  new DynamoDBClient({
-    region: process.env.APP_AWS_REGION ?? "ap-northeast-2",
-    credentials: {
-      accessKeyId: process.env.APP_AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.APP_AWS_SECRET_ACCESS_KEY!,
-    },
-  })
-);
-
-export const dynamic = "force-dynamic"; // 캐시 금지 — 매 호출이 실제 큐 소비
-
-export async function GET(req: NextRequest) {
-  const p = req.nextUrl.searchParams;
-  if (!process.env.REVALIDATE_SECRET || p.get("key") !== process.env.REVALIDATE_SECRET) {
-    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
-  }
-  const limit = Math.min(parseInt(p.get("limit") ?? "50", 10) || 50, 200);
-  const dryrun = p.get("dryrun") === "1";
-  const resend = p.get("resend");
-
-  // 목록용 슬림 아이템(LIST#) 스캔 — 발행 글만 존재하고 본문이 없어
-  // 전체를 읽어도 RCU 부담이 작다 (구 POST# 전체 스캔은 스로틀 유발로 교체)
-  const items: Record<string, any>[] = [];
-  let lek: Record<string, any> | undefined;
-  do {
-    const res = await doc.send(new QueryCommand({
-      TableName: TABLE,
-      KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
-      ExpressionAttributeValues: { ":pk": PK, ":sk": "LIST#" },
-      ExclusiveStartKey: lek,
-    }));
-    items.push(...(res.Items ?? []));
-    lek = res.LastEvaluatedKey as typeof lek;
-  } while (lek);
-
-  const published = items; // LIST# 는 발행 시에만 기록된다
-
-  let batch: Record<string, any>[];
-  if (resend) {
-    batch = published.filter((i) => i.naverSubmitted === resend);
-  } else {
-    batch = published
-      .filter((i) => !i.naverSubmitted)
-      .sort((a, b) =>
-        (a.updated ?? "").localeCompare(b.updated ?? "") ||
-        (a.slug as string).localeCompare(b.slug as string, "ko"))
-      .slice(0, limit);
-  }
-
-  const today = new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10); // KST
-  if (!dryrun && !resend) {
-    for (const it of batch) {
-      await doc.send(new UpdateCommand({
-        TableName: TABLE,
-        Key: { PK, SK: it.SK },
-        UpdateExpression: "SET naverSubmitted = :d",
-        ExpressionAttributeValues: { ":d": today },
-      }));
-    }
-  }
-
-  const urls = batch.map((i) => `${BASE_URL}/${encodeURIComponent(i.slug)}`);
-  const remaining = published.filter((i) => !i.naverSubmitted).length - (dryrun || resend ? 0 : urls.length);
-
-  if (p.get("format") === "json") {
-    return NextResponse.json({ ok: true, date: today, count: urls.length, remaining, urls });
-  }
-  return new Response(urls.join("\n") + "\n", {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "X-Queue-Remaining": String(remaining),
-    },
-  });
+export async function GET() {
+  return NextResponse.json(
+    { ok: false, error: "retired", message: "이 큐 API는 2026-09-17에 중단됐습니다. 제출 서버는 /sitemap.xml을 사용합니다." },
+    { status: 410 }
+  );
 }
