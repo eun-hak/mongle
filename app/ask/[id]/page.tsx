@@ -63,7 +63,7 @@ export default async function AskDetailPage({ params }: Props) {
         <ol>
           <li><a href="/">홈</a></li>
           <li className="crumb-sep" aria-hidden="true">›</li>
-          <li><a href="/ask">꿈 질문</a></li>
+          <li><a href="/ask/list">꿈 리스트</a></li>
           <li className="crumb-sep" aria-hidden="true">›</li>
           <li aria-current="page">{item.a.title}</li>
         </ol>
