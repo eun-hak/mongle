@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   validateQuestion, hashIp, kstDay, checkIpQuota, claimPublishSlot,
   matchTopics, interpret, newId, putAsk, DAILY_PER_IP, type AskItem,
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
     status, createdAt: new Date().toISOString(), day, model: result.model,
   };
   await putAsk({ ...item, ip: ipHash });
+  if (status === "public") revalidatePath("/ask");   // 목록에 바로 보이게
 
   return NextResponse.json({
     ok: true, id, url: `/ask/${id}`, status, answer: result.a,

@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "crypto";
-import { GetCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { doc, TABLE, getBlock, getBlocksByPrefix, getPostMetasBySlugs, type PostMeta } from "@/lib/posts";
+import { cache } from "react";
+import { GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { doc, TABLE, getBlocksByPrefix, getPostMetasBySlugs, type PostMeta } from "@/lib/posts";
 import TOPICS from "@/lib/dream-topics.json";
 
 /* ---------- 꿈 질문 (사용자 입력 → AI 풀이 → 공개 아카이브) ----------
@@ -215,11 +216,22 @@ export async function getAsk(id: string): Promise<AskItem | undefined> {
   return rest as AskItem;
 }
 
-/** 최근 공개 질문 (공장이 매일 재계산하는 블록) */
-export async function getRecentAsks(): Promise<AskLite[]> {
-  const b = await getBlock("BLOCK#ASK#RECENT");
-  return b?.items ?? [];
-}
+/** 최근 공개 질문 — 질문 파티션을 최신순(SK=Q#<날짜>-…)으로 직접 읽는다.
+ *  공장 블록(BLOCK#ASK#RECENT)은 하루 한 번이라 새 질문이 정오까지 안 보였다.
+ *  40건 × ~3KB ≈ 5 RCU, 페이지가 ISR 캐시라 실제 읽기는 시간당 1회 수준. */
+export const getRecentAsks = cache(async (limit = 12): Promise<AskLite[]> => {
+  const res = await doc.send(new QueryCommand({
+    TableName: TABLE,
+    KeyConditionExpression: "PK = :pk AND begins_with(SK, :q)",
+    ExpressionAttributeValues: { ":pk": ASK_PK, ":q": "Q#" },
+    ScanIndexForward: false,
+    Limit: 40,
+  }));
+  return (res.Items ?? [])
+    .filter((i) => i.status === "public" && i.a)
+    .slice(0, limit)
+    .map((i) => ({ id: i.id, t: i.a.title, v: i.a.verdict, s: String(i.a.summary).slice(0, 90), d: i.day }));
+});
 
 export async function getAskSitemapEntries(): Promise<{ id: string; d: string }[]> {
   const blocks = await getBlocksByPrefix("BLOCK#ASK#SITEMAP#");

@@ -8,8 +8,8 @@ import "../ask.css";
 
 interface Props { params: Promise<{ id: string }> }
 
-/** 질문 페이지는 생성 직후 첫 방문 때 ISR로 만들어지고 하루 주기로 갱신된다 */
-export const revalidate = 86400;
+/** 질문 페이지는 생성 직후 첫 방문 때 ISR로 만들어지고, 하단 "다른 분들이 물어본 꿈"이 돌도록 1시간 주기로 갱신된다 */
+export const revalidate = 3600;
 export const dynamicParams = true;
 export function generateStaticParams() { return []; }
 
