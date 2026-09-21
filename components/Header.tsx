@@ -26,6 +26,7 @@ export default function Header() {
           <a href="/">홈</a>
           <a href="/index/ㄱ">꿈사전</a>
           <a href="/ask">꿈 물어보기</a>
+          <a href="/ask/list">꿈 리스트</a>
           <a href="/about">소개</a>
         </nav>
       </div>
