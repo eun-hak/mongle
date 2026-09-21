@@ -25,6 +25,7 @@ export default function Header() {
         <nav className="site-nav" aria-label="주요 메뉴">
           <a href="/">홈</a>
           <a href="/index/ㄱ">꿈사전</a>
+          <a href="/ask">꿈 물어보기</a>
           <a href="/about">소개</a>
         </nav>
       </div>

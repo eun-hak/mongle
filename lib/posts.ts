@@ -111,7 +111,7 @@ export const CATEGORIES: CategoryInfo[] = [
  */
 
 const SITE = process.env.SITE_ID ?? "mongle";
-const TABLE = process.env.DDB_TABLE ?? "content";
+export const TABLE = process.env.DDB_TABLE ?? "content";
 const PK = `SITE#${SITE}`;
 
 // Vercel은 AWS_* 이름을 예약어로 막으므로 APP_AWS_* 이름을 우선 사용
@@ -122,7 +122,7 @@ const accessKeyId =
 const secretAccessKey =
   process.env.APP_AWS_SECRET_ACCESS_KEY ?? process.env.AWS_SECRET_ACCESS_KEY;
 
-const doc = DynamoDBDocumentClient.from(
+export const doc = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     region,
     ...(accessKeyId && secretAccessKey
@@ -178,12 +178,12 @@ function liteToMeta(l: LiteMeta): PostMeta {
   };
 }
 
-const getBlock = cache(async (sk: string): Promise<any | null> => {
+export const getBlock = cache(async (sk: string): Promise<any | null> => {
   const { Item } = await doc.send(new GetCommand({ TableName: TABLE, Key: { PK, SK: sk } }));
   return Item?.b ? JSON.parse(Item.b as string) : null;
 });
 
-const getBlocksByPrefix = cache(async (prefix: string): Promise<any[]> => {
+export const getBlocksByPrefix = cache(async (prefix: string): Promise<any[]> => {
   const out: any[] = [];
   let ExclusiveStartKey: Record<string, unknown> | undefined;
   do {
