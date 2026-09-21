@@ -233,6 +233,26 @@ export const getRecentAsks = cache(async (limit = 12): Promise<AskLite[]> => {
     .map((i) => ({ id: i.id, t: i.a.title, v: i.a.verdict, s: String(i.a.summary).slice(0, 90), d: i.day }));
 });
 
+/** 전체 목록 (커서 페이지네이션) — afterId 다음부터 최신순 limit 건.
+ *  경로형 커서(/ask/list/<id>)라 페이지마다 ISR 캐시가 된다. */
+export async function listAsks(afterId?: string, limit = 30): Promise<{ items: AskLite[]; next?: string }> {
+  const res = await doc.send(new QueryCommand({
+    TableName: TABLE,
+    KeyConditionExpression: "PK = :pk AND begins_with(SK, :q)",
+    FilterExpression: "#s = :pub",
+    ExpressionAttributeNames: { "#s": "status" },
+    ExpressionAttributeValues: { ":pk": ASK_PK, ":q": "Q#", ":pub": "public" },
+    ScanIndexForward: false,
+    Limit: limit,
+    ...(afterId && /^\d{8}-[0-9a-f]{8}$/.test(afterId) ? { ExclusiveStartKey: { PK: ASK_PK, SK: `Q#${afterId}` } } : {}),
+  }));
+  const items = (res.Items ?? []).filter((i) => i.a).map((i) => ({
+    id: i.id, t: i.a.title, v: i.a.verdict as Verdict, s: String(i.a.summary).slice(0, 90), d: i.day,
+  }));
+  const lastKey = res.LastEvaluatedKey?.SK as string | undefined;
+  return { items, next: lastKey ? lastKey.slice(2) : undefined };
+}
+
 export async function getAskSitemapEntries(): Promise<{ id: string; d: string }[]> {
   const blocks = await getBlocksByPrefix("BLOCK#ASK#SITEMAP#");
   return blocks.flatMap((b) => b.entries ?? []);

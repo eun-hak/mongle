@@ -88,7 +88,7 @@ export default async function AskDetailPage({ params }: Props) {
 
       {others.length > 0 && (
         <section className="ask-section ask-recent" aria-labelledby="others-heading">
-          <h2 id="others-heading" className="serif">다른 분들이 물어본 꿈</h2>
+          <h2 id="others-heading" className="serif">다른 분들이 물어본 꿈 <a href="/ask/list" className="ask-more">모두 보기 →</a></h2>
           <ul className="ask-recent-list">
             {others.map((r) => (
               <li key={r.id}>

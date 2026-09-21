@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import AskForm from "./AskForm";
-import { getRecentAsks } from "@/lib/ask";
 import "./ask.css";
-
-export const revalidate = 3600; // 최근 질문 목록은 공장이 매일 갱신하는 블록에서 읽는다
 
 export const metadata: Metadata = {
   title: "내 꿈 물어보기 — AI 꿈해몽",
@@ -11,8 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/ask" },
 };
 
-export default async function AskPage() {
-  const recent = (await getRecentAsks()).slice(0, 12);
+export default function AskPage() {
   return (
     <div className="container ask-page">
       <header className="ask-hero">
@@ -22,22 +18,10 @@ export default async function AskPage() {
 
       <AskForm />
 
-      {recent.length > 0 && (
-        <section className="ask-section ask-recent" aria-labelledby="recent-heading">
-          <h2 id="recent-heading" className="serif">다른 분들이 물어본 꿈</h2>
-          <ul className="ask-recent-list">
-            {recent.map((r) => (
-              <li key={r.id}>
-                <a href={`/ask/${r.id}`} className="ask-recent-item">
-                  <span className={`ask-verdict ask-verdict-${r.v === "길몽" ? "good" : r.v === "흉몽" ? "bad" : "mid"}`}>{r.v}</span>
-                  <span className="ask-recent-title">{r.t}</span>
-                  <span className="ask-recent-sum">{r.s}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <section className="ask-cta card">
+        <p className="serif">다른 분들은 어떤 꿈을 물어봤을까요?</p>
+        <a href="/ask/list" className="btn btn-ghost">물어본 꿈 모두 보기</a>
+      </section>
 
       <aside className="post-disclaimer">
         풀이는 전통 해몽 자료를 정리한 참고용 정보이며 과학적 사실이 아닙니다. 건강·법률·금전 등 중요한 판단은 현실의 정보를 근거로 하시기 바랍니다.

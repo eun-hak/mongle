@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     status, createdAt: new Date().toISOString(), day, model: result.model,
   };
   await putAsk({ ...item, ip: ipHash });
-  if (status === "public") revalidatePath("/ask");   // 목록에 바로 보이게
+  if (status === "public") revalidatePath("/ask/list");   // 목록 첫 페이지에 바로 보이게
 
   return NextResponse.json({
     ok: true, id, url: `/ask/${id}`, status, answer: result.a,
