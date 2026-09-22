@@ -1,0 +1,94 @@
+/* ---------- 꿈 질문 (/ask, /ask/[id]) ---------- */
+.ask-page { padding-block: 32px 56px; max-width: 760px; }
+
+.ask-hero { margin-bottom: 20px; }
+.ask-hero h1 { font-size: 30px; margin: 0 0 8px; }
+.ask-hero p { color: var(--ink-soft, #5b5568); line-height: 1.7; margin: 0; }
+
+.ask-h1 { font-size: 28px; line-height: 1.3; margin: 12px 0 6px; }
+.ask-meta { color: var(--ink-soft, #7a7488); font-size: 13px; margin: 0 0 20px; }
+
+/* 입력 폼 */
+.ask-form { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.ask-label { font-size: 20px; }
+.ask-hint { margin: 0; font-size: 14px; color: var(--ink-soft, #5b5568); line-height: 1.6; }
+.ask-form textarea {
+  width: 100%; min-height: 140px; resize: vertical; padding: 14px;
+  border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 16px; line-height: 1.7;
+}
+.ask-form textarea:focus { outline: 2px solid var(--moon); border-color: transparent; }
+.ask-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.ask-form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ask-count { font-size: 13px; color: var(--ink-soft, #7a7488); }
+.ask-count-low { color: #b45309; }
+.ask-notice { margin: 4px 0 0; font-size: 13px; line-height: 1.6; color: var(--ink-soft, #5b5568); }
+
+/* 대기 */
+.ask-loading { margin-top: 16px; padding: 28px; text-align: center; }
+.ask-loading-moon { display: inline-block; font-size: 32px; animation: ask-float 1.6s ease-in-out infinite; }
+.ask-loading p { margin: 8px 0 0; font-size: 16px; }
+.ask-loading-sub { font-size: 13px !important; color: var(--ink-soft, #7a7488); }
+@keyframes ask-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+.ask-error { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #fdecec; color: #8a1f1f; line-height: 1.6; }
+
+/* 풀이 본문 */
+.ask-result { margin-top: 28px; }
+.ask-answer { display: flex; flex-direction: column; gap: 22px; }
+.ask-q { margin: 0; padding: 16px 18px; border-left: 4px solid var(--moon); }
+.ask-q-label { display: block; font-size: 12px; letter-spacing: .04em; color: var(--ink-soft, #7a7488); margin-bottom: 6px; }
+.ask-q p { margin: 0; line-height: 1.75; white-space: pre-wrap; }
+
+.ask-verdict-row { display: flex; gap: 12px; align-items: flex-start; }
+.ask-verdict {
+  flex: none; display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  background: #eee; color: #444;
+}
+.ask-verdict-good { background: #e6f4ea; color: #1e6b3a; }
+.ask-verdict-bad { background: #fdecec; color: #8a1f1f; }
+.ask-verdict-mid { background: #eef0f5; color: #3d4560; }
+.ask-summary { margin: 0; font-size: 17px; line-height: 1.75; font-weight: 500; }
+
+.ask-section h2 { font-size: 20px; margin: 0 0 10px; }
+.ask-section p { margin: 0; line-height: 1.85; }
+.ask-symbols { margin: 0; display: grid; gap: 10px; }
+.ask-symbol { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.ask-symbol dt { font-weight: 700; margin-bottom: 4px; }
+.ask-symbol dd { margin: 0; line-height: 1.7; color: var(--ink); }
+.ask-advice { padding: 18px 20px; background: #fffaf0; border-color: #f1e3b8; }
+
+.ask-permalink { margin-top: 22px; font-size: 14px; color: var(--ink-soft, #5b5568); word-break: break-all; }
+
+/* CTA · 최근 질문 */
+.ask-cta { margin-top: 28px; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.ask-cta p { margin: 0; font-size: 18px; }
+.ask-recent { margin-top: 32px; }
+.ask-recent-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ask-recent-item {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: center;
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; text-decoration: none; color: inherit;
+}
+.ask-recent-item:hover { border-color: var(--moon); }
+.ask-recent-title { font-weight: 600; min-width: 0; }
+.ask-recent-sum { grid-column: 2; font-size: 13px; color: var(--ink-soft, #5b5568); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.ask-page .post-disclaimer { margin-top: 32px; }
+
+@media (max-width: 480px) {
+  .ask-hero h1 { font-size: 25px; }
+  .ask-h1 { font-size: 23px; }
+  .ask-form { padding: 16px; }
+}
+
+/* 목록 페이지 */
+.ask-list .ask-recent-item { grid-template-columns: auto minmax(0, 1fr) auto; }
+.ask-recent-date { font-size: 12px; color: var(--ink-soft, #7a7488); white-space: nowrap; }
+.ask-list .ask-recent-sum { grid-column: 2 / 4; }
+.ask-empty { padding: 28px; text-align: center; color: var(--ink-soft, #5b5568); }
+.ask-pager { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.ask-pager a:only-child { margin-left: auto; }
+.ask-more { font-size: 14px; font-weight: 400; margin-left: 10px; color: var(--ink-soft, #5b5568); }
+
+/* 브레드크럼 — post.css 의 규칙은 글 페이지에만 로드되므로 여기서도 정의 */
+.ask-page .post-crumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+.ask-page .post-crumb li[aria-current="page"] { color: var(--ink); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60vw; }
+.ask-page .crumb-sep { color: var(--lav-soft); }

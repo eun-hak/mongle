@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
-  const paths = ["/", "/sitemap.xml", "/rss.xml"];
+  const paths = ["/", "/sitemap.xml", "/rss.xml", "/ask", "/ask/list", "/sitemap-ask.xml"];
   for (const slug of slugs ?? []) {
     paths.push(`/${encodeURIComponent(slug)}`);
     paths.push(`/${slug}`);
@@ -17,5 +17,6 @@ export async function POST(req: NextRequest) {
   // 카테고리·색인 목록도 갱신
   revalidatePath("/category/[cat]", "page");
   revalidatePath("/index/[group]", "page");
+  revalidatePath("/ask/[id]", "page");
   return NextResponse.json({ ok: true, revalidated: paths.length + 2 });
 }

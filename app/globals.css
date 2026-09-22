@@ -348,3 +348,9 @@ a:hover {
 .home-top-list > li {
   min-width: 0;
 }
+
+/* 메뉴 5개(홈·꿈사전·꿈 물어보기·꿈 리스트·소개)가 좁은 화면에서 넘치지 않게 */
+@media (max-width: 520px) {
+  .site-nav { flex-wrap: wrap; gap: 8px 14px; justify-content: flex-end; }
+  .site-nav a { font-size: 14px; }
+}
