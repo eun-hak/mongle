@@ -40,6 +40,8 @@ export async function generateMetadata({
     title: post.headline,
     description: post.intro,
     alternates: { canonical: url },
+    // 정리 대상 페이지: 색인만 제외하고 링크는 따라가게 둔다 (URL·본문은 유지)
+    ...(post.noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: "article",
       title: post.headline,

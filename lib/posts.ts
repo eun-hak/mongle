@@ -44,6 +44,8 @@ export interface Post {
   related: string[];
   /** 검색용 변형 질문/표현 */
   variants: string[];
+  /** 색인 제외 플래그 — 2026-09 정리(수요 없는 자동 조합 페이지). URL은 유지, robots noindex + 목록·사이트맵 제외 */
+  noindex?: boolean;
 }
 
 /** 목록용 슬림 글 — 본문(sections/faq)을 제외한 필드만.
